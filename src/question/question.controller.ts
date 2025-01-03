@@ -27,7 +27,7 @@ export class QuestionController {
 
   @Patch(':id')
   updateOne(@Param('id') id: string, @Body() questionDto: QuestionDto) {
-    console.log(...questionDto);
+    console.log(questionDto);
     return {
       id,
       title: 'sss',
