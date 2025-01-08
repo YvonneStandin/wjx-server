@@ -10,6 +10,7 @@ export class QuestionService {
     @InjectModel(Question.name) private readonly questionModel,
   ) {}
 
+  // 新建问卷
   async create(username: string) {
     const question = new this.questionModel({
       title: '问卷标题' + Date.now(),
@@ -27,20 +28,53 @@ export class QuestionService {
     return await question.save();
   }
 
-  async delete(id: string) {
-    return await this.questionModel.findByIdAndDelete(id);
+  // 删除单个问卷
+  async delete(id: string, author: string) {
+    // return await this.questionModel.findByIdAndDelete(id, author);
+    const res = await this.questionModel.findOneAndDelete({
+      _id: id,
+      author,
+    });
+
+    return res;
   }
 
-  async update(id: string, updateData) {
-    return await this.questionModel.updateOne({ _id: id }, updateData);
+  // 删除多个问卷
+  async deleteMany(ids: string[], author: string) {
+    const res = await this.questionModel.deleteMany({
+      _id: { $in: ids }, // 在 ids 范围内的 id 都删除
+      author,
+    });
+
+    return res;
   }
 
+  // 更新问卷
+  async update(id: string, updateData, author) {
+    return await this.questionModel.updateOne({ _id: id, author }, updateData);
+  }
+
+  // 查询单个问卷信息
   async findOne(id: string) {
     return await this.questionModel.findById(id);
   }
 
-  async findAllList({ keyword = '', page = 1, pageSize = 10 }) {
-    const whereOpt: any = {};
+  // 获取问卷列表
+  async findAllList({
+    keyword = '',
+    page = 1,
+    pageSize = 10,
+    isStar,
+    isDeleted,
+    author = '',
+  }) {
+    const whereOpt: any = {
+      author,
+      isDeleted,
+    };
+    if (isStar != null) {
+      whereOpt.isStar = isStar;
+    }
     if (keyword) {
       const reg = new RegExp(keyword, 'i');
       whereOpt.title = { $regex: reg }; // 模糊搜索
@@ -52,8 +86,12 @@ export class QuestionService {
       .limit(pageSize); // 限制取10条
   }
 
-  async countAll({ keyword = '' }) {
-    const whereOpt: any = {};
+  // 获取问卷数量
+  async countAll({ keyword = '', isStar, isDeleted, author = '' }) {
+    const whereOpt: any = { author, isDeleted };
+    if (isStar != null) {
+      whereOpt.isStar = isStar;
+    }
     if (keyword) {
       const reg = new RegExp(keyword, 'i');
       whereOpt.title = { $regex: reg }; // 模糊搜索
