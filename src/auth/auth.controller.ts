@@ -15,7 +15,7 @@ import { Public } from './decorators/public.decorator';
 export class AuthController {
   constructor(private readonly AuthService: AuthService) {}
 
-  @Public()
+  @Public() // 不用校验
   @Post('login')
   async login(@Body() userInfo: CreateUserDto) {
     const { username, password } = userInfo;
