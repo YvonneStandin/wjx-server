@@ -88,4 +88,11 @@ export class QuestionController {
     const { username } = req.user;
     return this.QuestionService.update(id, questionDto, username);
   }
+
+  // 复制问卷
+  @Post('duplicate/:id')
+  duplicate(@Param('id') id: string, @Request() req) {
+    const { username } = req.user;
+    return this.QuestionService.duplicate(id, username);
+  }
 }
