@@ -7,8 +7,7 @@ import {
   Query,
   Param,
   Body,
-  HttpException,
-  HttpStatus,
+  Request,
 } from '@nestjs/common';
 import { QuestionDto } from './dto/question.dto';
 import { QuestionService } from './question.service';
@@ -17,15 +16,11 @@ import { QuestionService } from './question.service';
 export class QuestionController {
   // 依赖注入
   constructor(private readonly QuestionService: QuestionService) {}
-  // 模拟错误
-  @Get('test')
-  getTest(): string {
-    throw new HttpException('模拟数据失败', HttpStatus.BAD_REQUEST);
-  }
 
   @Post()
-  create() {
-    return this.QuestionService.create();
+  create(@Request() req) {
+    const { username } = req.user;
+    return this.QuestionService.create(username);
   }
 
   @Get()
