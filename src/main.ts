@@ -15,6 +15,9 @@ async function bootstrap() {
   // 全局过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  // 允许跨域
+  app.enableCors();
+
   // 端口
   await app.listen(process.env.PORT ?? 3005);
 }
