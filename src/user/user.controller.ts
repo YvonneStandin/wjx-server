@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UserController {
   constructor(private readonly UserService: UserService) {}
 
+  // 注册
   @Post('register')
   async register(@Body() userDto: CreateUserDto) {
     try {

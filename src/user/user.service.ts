@@ -7,11 +7,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UserService {
   constructor(@InjectModel(User.name) private readonly userModel) {}
 
+  // 注册
   async create(userData: CreateUserDto) {
     const createUser = new this.userModel(userData);
     return await createUser.save();
   }
 
+  // 登陆
   async findOne(username: string, password: string) {
     return await this.userModel.findOne({ username, password });
   }

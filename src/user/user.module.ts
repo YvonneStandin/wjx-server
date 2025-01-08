@@ -8,6 +8,8 @@ import { User, UserSchema } from './schemas/user.schema';
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
+  // 供 auth 模块使用 findOne
+  exports: [UserService],
   providers: [UserService],
   controllers: [UserController],
 })
