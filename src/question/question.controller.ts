@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { QuestionDto } from './dto/question.dto';
 import { QuestionService } from './question.service';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('question')
 export class QuestionController {
@@ -18,6 +19,7 @@ export class QuestionController {
   constructor(private readonly QuestionService: QuestionService) {}
 
   // 创建问卷
+  // C 端创建答卷时需要获取，不需要身份校验
   @Post()
   create(@Request() req) {
     const { username } = req.user;
@@ -58,6 +60,7 @@ export class QuestionController {
   }
 
   // 查询单个问卷信息
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.QuestionService.findOne(id);

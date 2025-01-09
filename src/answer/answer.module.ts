@@ -10,5 +10,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   ],
   providers: [AnswerService],
   controllers: [AnswerController],
+  exports: [AnswerService],
 })
 export class AnswerModule {}
