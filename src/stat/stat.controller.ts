@@ -5,7 +5,7 @@ import { StatService } from './stat.service';
 export class StatController {
   constructor(private readonly StatService: StatService) {}
 
-  @Get(':questionID')
+  @Get(':questionId')
   async getQuestionStat(
     @Param('questionId') questionId: string,
     @Query('page') page: number = 1,
@@ -15,5 +15,17 @@ export class StatController {
       page,
       pageSize,
     });
+  }
+
+  @Get(':questionId/:componentFeId')
+  async getComponentStat(
+    @Param('questionId') questionId: string,
+    @Param('componentFeId') componentFeId: string,
+  ) {
+    const stat = await this.StatService.getComponentStat(
+      questionId,
+      componentFeId,
+    );
+    return { stat };
   }
 }
