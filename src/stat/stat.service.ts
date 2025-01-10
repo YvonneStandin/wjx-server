@@ -15,8 +15,8 @@ export class StatService {
     const res = {};
 
     answerList.forEach((a) => {
-      const { componentFeId, value } = a;
-      res[componentFeId] = value.toString();
+      const { componentId, value } = a;
+      res[componentId] = value.toString();
     });
 
     return res;
@@ -69,7 +69,7 @@ export class StatService {
 
     const { type } = comp;
     // 非单选和多选的组件不统计
-    if (type !== 'questionRadio' && type !== 'questionCheckbox') return [];
+    if (type !== 'QuestionRadio' && type !== 'QuestionCheckbox') return [];
 
     // 获取答卷列表
     const total = await this.AnswerService.count(questionId);
@@ -86,8 +86,8 @@ export class StatService {
     answers.forEach((a) => {
       const { answerList = [] } = a;
       answerList.forEach((a) => {
-        if (a.componentFeId !== componentFeId) return;
-        a.value.forEach((v) => {
+        if (a.componentId !== componentFeId || !a.value) return;
+        a.value.split(',').forEach((v) => {
           if (countInfo[v] == null) countInfo[v] = 0;
           countInfo[v]++;
         });
